@@ -1,8 +1,10 @@
 from flask import Flask, request, jsonify, render_template
+from flask_cors import CORS
 import ast
 import json
 
 app = Flask(__name__)
+CORS(app)  # Enable CORS for all routes
 
 def parse_python_code(code):
     tree = ast.parse(code)
@@ -36,7 +38,7 @@ def analyze_python_code(code):
     element_count = 1
 
     for name, parent in parents.items():
-        key = f"{element_count}"
+        key = f"element{element_count}"
         output_data[key] = {
             "name": name,
             "Type": "Function",
@@ -46,7 +48,7 @@ def analyze_python_code(code):
         element_count += 1
 
     for name in classes.keys():
-        key = f"{element_count}"
+        key = f"element{element_count}"
         output_data[key] = {
             "name": name,
             "Type": "Class",
